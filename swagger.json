@@ -1,0 +1,226 @@
+{
+    "swagger" : "2.0",
+    "info" : {
+      "description" : "This is a EnigmaStore server",
+      "version" : "1.0.0",
+      "title" : "Swagger EnigmaStore"
+    },
+    "tags" : [ {
+      "name" : "category",
+      "description" : "Everything about your Category"
+    }],
+    "schemes" : [ "http", "https" ],
+    "paths" : {
+      "/category" : {
+        "get" : {
+          "tags" : [ "category" ],
+          "summary" : "Returns category data",
+          "operationId" : "getCategory",
+          "produces" : [ "application/json" ],
+          "parameters" : [ ],
+          "responses" : {
+            "200" : {
+              "description" : "successful operation",
+              "schema" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            },
+            "400" : {
+              "description" : "Invalid ID supplied"
+            },
+            "404" : {
+              "description" : "Category not found"
+            }
+          },
+          "security" : [ {
+            "api_key" : [ ]
+          } ]
+        },
+        "post" : {
+          "tags" : [ "category" ],
+          "summary" : "Add a new category to the store",
+          "description" : "",
+          "operationId" : "addCategory",
+          "consumes" : [ "application/json" ],
+          "produces" : [ "application/json" ],
+          "parameters" : [ {
+            "in" : "body",
+            "name" : "body",
+            "description" : "Category object that needs to be added to the store",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/CategoryPost"
+            }
+          } ],
+          "responses" : {
+            "405" : {
+              "description" : "Invalid input"
+            }
+          },
+          "security" : [ {
+            "petstore_auth" : [ "write:pets", "read:pets" ]
+          } ]
+        },
+        "put" : {
+          "tags" : [ "category" ],
+          "summary" : "Update an existing category",
+          "description" : "",
+          "operationId" : "updateCategory",
+          "consumes" : [ "application/json"],
+          "produces" : ["application/json" ],
+          "parameters" : [ {
+            "in" : "body",
+            "name" : "body",
+            "description" : "Category object that needs to be added to the store",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/definitions/Category"
+            }
+          } ],
+          "responses" : {
+            "400" : {
+              "description" : "Invalid ID supplied"
+            },
+            "404" : {
+              "description" : "Product not found"
+            },
+            "405" : {
+              "description" : "Validation exception"
+            }
+          },
+          "security" : [ {
+            "petstore_auth" : [ "write:products", "read:categorys" ]
+          } ]
+        }
+      },
+      "/category?id=" : {
+        "get" : {
+          "tags" : [ "category" ],
+          "summary" : "Find category by ID",
+          "description" : "Returns a single category",
+          "operationId" : "getCategoryById",
+          "produces" : ["application/json" ],
+          "parameters" : [ {
+            "in" : "query",
+            "name" : "id",
+            "description" : "ID of category to return",
+            "required" : true,
+            "type" : "string"
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "successful operation",
+              "schema" : {
+                "$ref" : "#/definitions/ApiResponse"
+              }
+            },
+            "400" : {
+              "description" : "Invalid ID supplied"
+            },
+            "404" : {
+              "description" : "Category not found"
+            }
+          },
+          "security" : [ {
+            "api_key" : [ ]
+          } ]
+        }
+      },
+      "/category/{id}" : {
+        "delete" : {
+          "tags" : [ "category" ],
+          "summary" : "Deletes a Category",
+          "description" : "",
+          "operationId" : "deleteCategory",
+          "produces" : [ "application/json" ],
+          "parameters" : [{
+            "name" : "categoryId",
+            "in" : "path",
+            "description" : "Category id to delete",
+            "required" : true,
+            "type" : "integer"
+          } ],
+          "responses" : {
+            "400" : {
+              "description" : "Invalid ID supplied"
+            },
+            "404" : {
+              "description" : "Category not found"
+            }
+          },
+          "security" : [ {
+            "petstore_auth" : [ "write:categorys", "read:categorys" ]
+          } ]
+        }
+      }
+    },
+    "securityDefinitions" : {
+      "petstore_auth" : {
+        "type" : "oauth2",
+        "flow" : "implicit",
+        "scopes" : {
+          "write:pets" : "modify categorys in your account",
+          "read:pets" : "read your categorys"
+        }
+      },
+      "api_key" : {
+        "type" : "apiKey",
+        "name" : "api_key",
+        "in" : "header"
+      }
+    },
+    "definitions" : {
+      "Category" : {
+        "type" : "object",
+        "required" : [ "name", "photoUrls" ],
+        "properties" : {
+          "id" : {
+            "type":"integer",
+            "example": "1192f8d0-583f-11ea-b0df-93a95c4a284a"
+          },
+          "categoryName" : {
+            "type" : "string",
+            "example" : "Zink"
+          }
+        }
+      },
+      "CategoryPost" : {
+        "type" : "object",
+        "required" : [ "name", "photoUrls" ],
+        "properties" : {
+          "categoryName" : {
+            "type" : "string",
+            "example" : "Alat Makan"
+          }
+        },
+        "xml" : {
+          "name" : "Category"
+        }
+      },
+      "Tag" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "xml" : {
+          "name" : "Tag"
+        }
+      },
+      "ApiResponse" : {
+        "type" : "object",
+        "properties" :{
+          "id" : {
+            "type" : "integer"
+          },
+          "categoryName" : {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
